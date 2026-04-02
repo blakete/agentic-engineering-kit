@@ -16,6 +16,7 @@ Requires **iTerm2** and **terminal-notifier** (`brew install terminal-notifier`)
 | Claude needs input (`Notification`) | Funk.aiff | "Claude needs your input" | — |
 | User submits a message (`UserPromptSubmit`) | — | — | Resets to default |
 | Claude uses a tool (`PreToolUse`) | — | — | Resets to default (fallback) |
+| Claude Code exits (`SessionEnd`) | — | — | Resets to default |
 
 ### Hook commands
 
@@ -46,6 +47,11 @@ printf '\033]111\007' > /dev/tty
 printf '\033]111\007' > /dev/tty
 ```
 
+#### SessionEnd — reset background on exit
+```bash
+printf '\033]111\007' > /dev/tty
+```
+
 #### SessionStart — set iTerm2 badge to session ID
 ```bash
 printf '\033]1337;SetBadgeFormat=%s\007' \
@@ -65,6 +71,7 @@ Color changes via OSC 11/111 work on most terminals (GNOME Terminal, Konsole, Ti
 | Claude finishes (`Stop`) | Turns green (`#143d14`) |
 | User submits a message (`UserPromptSubmit`) | Resets to default |
 | Claude uses a tool (`PreToolUse`) | Resets to default (fallback) |
+| Claude Code exits (`SessionEnd`) | Resets to default |
 
 ### Hook commands
 
@@ -79,6 +86,11 @@ printf '\033]111\007' > /dev/tty
 ```
 
 #### PreToolUse — reset background to default (fallback for tool-using turns)
+```bash
+printf '\033]111\007' > /dev/tty
+```
+
+#### SessionEnd — reset background on exit
 ```bash
 printf '\033]111\007' > /dev/tty
 ```
