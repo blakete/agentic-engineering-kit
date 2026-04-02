@@ -12,6 +12,7 @@ Requires **iTerm2** and **terminal-notifier** (`brew install terminal-notifier`)
 
 | Event | Sound | macOS Notification | Terminal Background |
 |---|---|---|---|
+| New session starts (`SessionStart`) | — | — | Turns green (`#143d14`) |
 | Claude finishes (`Stop`) | Funk.aiff | "Claude has finished" | Turns green (`#143d14`) |
 | Claude needs input (`Notification`) | Funk.aiff | "Claude needs your input" | — |
 | User submits a message (`UserPromptSubmit`) | — | — | Resets to default |
@@ -52,10 +53,11 @@ printf '\033]111\007' > /dev/tty
 printf '\033]111\007' > /dev/tty
 ```
 
-#### SessionStart — set iTerm2 badge to session ID
+#### SessionStart — set iTerm2 badge to session ID + turn background green
 ```bash
 printf '\033]1337;SetBadgeFormat=%s\007' \
   $(echo -n "${ITERM_SESSION_ID%%:*}" | base64)
+printf '\033]11;#143d14\007' > /dev/tty
 ```
 
 ---
@@ -68,6 +70,7 @@ Color changes via OSC 11/111 work on most terminals (GNOME Terminal, Konsole, Ti
 
 | Event | Terminal Background |
 |---|---|
+| New session starts (`SessionStart`) | Turns green (`#143d14`) |
 | Claude finishes (`Stop`) | Turns green (`#143d14`) |
 | User submits a message (`UserPromptSubmit`) | Resets to default |
 | Claude uses a tool (`PreToolUse`) | Resets to default (fallback) |
@@ -93,6 +96,11 @@ printf '\033]111\007' > /dev/tty
 #### SessionEnd — reset background on exit
 ```bash
 printf '\033]111\007' > /dev/tty
+```
+
+#### SessionStart — turn background green
+```bash
+printf '\033]11;#143d14\007' > /dev/tty
 ```
 
 ---
