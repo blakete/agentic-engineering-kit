@@ -80,27 +80,27 @@ Color changes via OSC 11/111 work on most terminals (GNOME Terminal, Konsole, Ti
 
 #### Stop — turn background green
 ```bash
-printf '\033]11;#143d14\007' > /dev/tty
+if [ -n "$TMUX" ]; then printf '\033Ptmux;\033\033]11;#143d14\007\033\\' > /dev/tty; else printf '\033]11;#143d14\007' > /dev/tty; fi
 ```
 
 #### UserPromptSubmit — reset background to default
 ```bash
-printf '\033]111\007' > /dev/tty
+if [ -n "$TMUX" ]; then printf '\033Ptmux;\033\033]111\007\033\\' > /dev/tty; else printf '\033]111\007' > /dev/tty; fi
 ```
 
 #### PreToolUse — reset background to default (fallback for tool-using turns)
 ```bash
-printf '\033]111\007' > /dev/tty
+if [ -n "$TMUX" ]; then printf '\033Ptmux;\033\033]111\007\033\\' > /dev/tty; else printf '\033]111\007' > /dev/tty; fi
 ```
 
 #### SessionEnd — reset background on exit
 ```bash
-printf '\033]111\007' > /dev/tty
+if [ -n "$TMUX" ]; then printf '\033Ptmux;\033\033]111\007\033\\' > /dev/tty; else printf '\033]111\007' > /dev/tty; fi
 ```
 
 #### SessionStart — turn background green
 ```bash
-printf '\033]11;#143d14\007' > /dev/tty
+if [ -n "$TMUX" ]; then printf '\033Ptmux;\033\033]11;#143d14\007\033\\' > /dev/tty; else printf '\033]11;#143d14\007' > /dev/tty; fi
 ```
 
 ---
@@ -111,3 +111,13 @@ printf '\033]11;#143d14\007' > /dev/tty
 - `\033]111\007` — OSC 111: reset terminal background to default
 - `\033]1337;SetBadgeFormat=...\007` — iTerm2 proprietary: set badge (macOS/iTerm2 only)
 - Must write to `/dev/tty` directly since Claude Code captures hook stdout
+
+## tmux
+
+tmux intercepts OSC sequences by default and does not forward them to the outer terminal. Wrap sequences in tmux's DCS passthrough to make them work:
+
+```
+\033Ptmux;\033<OSC sequence>\033\\
+```
+
+Each `\033` inside the passthrough must be doubled (`\033\033`). Check `$TMUX` to branch between tmux and non-tmux environments so the same config works in both.
